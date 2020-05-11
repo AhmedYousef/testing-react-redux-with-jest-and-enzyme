@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Headline from './index';
-import { findByTestAttr } from '../../../Utils';
+import { findByTestAttr, checkProps } from '../../../Utils';
+
 
 const setUp = (props = {}) => {
     const compoenet = shallow(<Headline {...props} />);
@@ -9,42 +10,31 @@ const setUp = (props = {}) => {
 };
 
 describe('Headline Component', () => {
-    describe('Have props', () => {
-        let wrapper;
-        beforeEach(() => {
-            const props = {
+
+    describe('Checking PropTypes', () => {
+        it('It should not through a warning', () => {
+            const expectedProps = {
                 header: 'Test Header',
-                desc: 'Test Desc'
+                desc: 'Test Desc',
+                tempArr: [{
+                    fName: 'Test fName',
+                    lName: 'Test lName',
+                    email: 'test@gmail.com',
+                    age: 23,
+                    onlineStatus: false
+                }]
             };
-            wrapper = setUp(props);
-        });
 
-        it('Should render wihthout errors', () => {
-            const compoenet = findByTestAttr(wrapper, 'headline-component');
-            expect(compoenet.length).toBe(1);
+            const propsErr = checkProps(Headline, expectedProps);
+            expect(propsErr).toBeUndefined();
         });
+    });
 
-        it('Should render a H1', () => {
-            const h1 = findByTestAttr(wrapper, 'header');
-            expect(h1.length).toBe(1);
-        });
-
-        it('Should render a desc', () => {
-            const desc = findByTestAttr(wrapper, 'desc');
-            expect(desc.length).toBe(1);
-        });
+    describe('Have props', () => {
 
     });
 
     describe('Have NO props', () => {
-        let wrapper;
-        beforeEach(() => {
-            wrapper = setUp();
-        });
 
-        it('Should not render', () => {
-            const compoenet = findByTestAttr(wrapper, 'headline-component');
-            expect(compoenet.length).toBe(0);
-        })
     });
 });
